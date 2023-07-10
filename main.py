@@ -84,8 +84,6 @@ while running:
     if game_running:
         # timer clock
         start_time = pygame.time.get_ticks() - current_time
-        print(start_time)
-        # remaining_time = max(0, (duration - pygame.time.get_ticks())) // 1000
         remaining_time = max(0, (duration - start_time)) // 1000
         # Render the countdown timer
         if remaining_time != 0:
@@ -93,37 +91,18 @@ while running:
             circle.draw(cointaner_x, cointaner_y, container_width, container_height)
             # Event of click on circle
             if event.type == MOUSEBUTTONDOWN:
-                # print("DRAWED")
                 if event.button == 1:  # Left mouse button
                     # Get the mouse coordinates
                     mouse_x, mouse_y = pygame.mouse.get_pos()
-                    # print("POS ",mouse_x," ",mouse_y)
-                    # print("circle ", cointaner_x, cointaner_y)
             # check if point inside circle
             if mouse_x >= (cointaner_x) and mouse_x <=  (cointaner_x + container_width):
                 if mouse_y >= (cointaner_y) and mouse_y <= (cointaner_y + container_height):
                     cointaner_x = random.randint(constraint_x_left + container_width, constraint_x_right - container_width)
                     cointaner_y = random.randint(constraint_y_top + container_height, constraint_y_bottom - container_height)
                     circle.draw(cointaner_x, cointaner_y, container_width, container_height)
-                    print("INSIDE ")
+                    print("Ball Hit! +1 Point ")
         elif remaining_time <= 0:
             display_text(font, window_width/2, window_height/5, window, text="Time Reached!")
-    
-    # circle.draw(cointaner_x, cointaner_y, container_width, container_height)
-    # if event.type == MOUSEBUTTONDOWN:
-    #     print("DRAWED")
-    #     if event.button == 1:  # Left mouse button
-    #         # Get the mouse coordinates
-    #         mouse_x, mouse_y = pygame.mouse.get_pos()
-    #         # print("POS ",mouse_x," ",mouse_y)
-    #         # print("circle ", cointaner_x, cointaner_y)
-    # # check if point inside circle
-    # if mouse_x >= (cointaner_x) and mouse_x <=  (cointaner_x + container_width):
-    #     if mouse_y >= (cointaner_y) and mouse_y <= (cointaner_y + container_height):
-    #         cointaner_x = random.randint(constraint_x_left + container_width, constraint_x_right - container_width)
-    #         cointaner_y = random.randint(constraint_y_top + container_height, constraint_y_bottom - container_height)
-    #         circle.draw(cointaner_x, cointaner_y, container_width, container_height)
-    #         # print("INSIDE ")
 
     # flip() the display to put your work on window
     pygame.display.flip()
