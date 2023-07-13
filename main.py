@@ -24,23 +24,25 @@ window = pygame.display.set_mode((window_width, window_height))
 clock = pygame.time.Clock()
 running = True
 game_running = False
+end_score = True
 start = True
 score = 0
 
 # timer setup
 duration = 11 * 1000
 
-# circle setup
+# constraint area setup #NOTE to limit area of ball appears
 constraint_x_left = ((window_width/2)/2)
 constraint_x_right = window_width - constraint_x_left
 constraint_y_top = ((window_height/2)/2)
 constraint_y_bottom = window_height - constraint_y_top
-circle_color = (173,216,230)
-container_width = 40
-container_height = 40
-cointaner_x = random.randint(constraint_x_left + container_width, constraint_x_right - container_width)
-cointaner_y = random.randint(constraint_y_top + container_height, constraint_y_bottom - container_height)
 
+# circle setup
+circle_color = (173,216,230)
+container_width = 40 # circle's boundaries
+container_height = 40 # circle's boundaries
+cointaner_x = random.randint(constraint_x_left + container_width, constraint_x_right - container_width) # point for circle at x
+cointaner_y = random.randint(constraint_y_top + container_height, constraint_y_bottom - container_height) # point for circle at y
 
 # button click
 mouse_x, mouse_y = (window_width // 2, window_height // 2)
@@ -107,6 +109,9 @@ while running:
         elif remaining_time <= 0:
             display_text(font, font_color, window_width/2, window_height/5, window, text="Times Up!")
             display_text(font, font_color, window_width/2, window_height/2, window, text=f'Your Score : {str(score)}')
+            if end_score:
+                print("Your Score : ", score)
+                end_score = False
     
             #TODO 1.0 print score after game finish only once
             #TODO 2.0 restart game / home option
@@ -115,7 +120,7 @@ while running:
             #TODO 5.0 add countdown before start game
             #TODO 6.0 add sound if ball hit and ball appear
             #TODO 7.0 change mouse cursor
-            #TODO allow player to pick time [10,30,60] seconds
+            #TODO 8.0 allow player to pick time [10,30,60] seconds
 
     # flip() the display to put your work on window
     pygame.display.flip()
