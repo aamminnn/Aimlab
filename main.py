@@ -113,7 +113,6 @@ while running:
                 print("Your Score : ", score)
                 end_score = False
     
-            #TODO 1.0 print score after game finish only once
             #TODO 2.0 restart game / home option
             #TODO 3.0 display real time score
             #TODO 4.0 adjust constraint area for ball to appear
