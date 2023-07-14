@@ -57,9 +57,10 @@ def main():
     game_running = False
     end_score = True
     home = True
-    restart = False
+    restart = True
     timer = True
     display_score = True
+    start_countdown = True
 
     # Set up the font
     font = pygame.font.SysFont(None, 48)
@@ -69,6 +70,7 @@ def main():
     # timer setup
     # duration = 11 * 1000
     duration = 4 * 1000 # testing purpose
+    countdown_duration = 4 * 1000
 
     # constraint area setup #NOTE to limit area of ball appears
     constraint_x_left = ((window_width/2)/2)
@@ -125,7 +127,7 @@ def main():
         # RENDER YOUR GAME HERE
         # start game
         if home:
-            current_time = pygame.time.get_ticks()
+            # current_time = pygame.time.get_ticks()
             display_text(font, font_color, window_width/2, window_height/6, window, text="Click on ball to start game!")
             cointaner_x_start = window_width/2
             cointaner_y_start = window_height/2
@@ -144,69 +146,85 @@ def main():
 
 
         if game_running:
-            # timer clock
-            # if game restart
-            if restart:
-                # intialize current time again
-                current_time = pygame.time.get_ticks()
-                # to get current time only once
-                restart = False
-            # if remaining_time != 0:
-            if timer == True:
-                start_time = pygame.time.get_ticks() - current_time 
-                remaining_time = max(0, (duration - start_time)) // 1000
-                # Render the countdown timer
-                display_text(font, font_color, window_width/2, window_height/6, window, text=str(remaining_time))
-                circle.draw(cointaner_x, cointaner_y, container_width, container_height)
-                if display_score:
-                    display_text(font_score, font_color, window_width/4, window_height/4, window, text=f'Score : {score}')
-                # Event of click on circle
-                if event.type == MOUSEBUTTONDOWN:
-                    if event.button == 1:  # Left mouse button
-                        # Get the mouse coordinates
-                        mouse_x, mouse_y = pygame.mouse.get_pos()
-                # check if point inside circle
-                if mouse_x >= (cointaner_x) and mouse_x <=  (cointaner_x + container_width):
-                    if mouse_y >= (cointaner_y) and mouse_y <= (cointaner_y + container_height):
-                        cointaner_x = random.randint(constraint_x_left + container_width, constraint_x_right - container_width)
-                        cointaner_y = random.randint(constraint_y_top + container_height, constraint_y_bottom - container_height)
-                        circle.draw(cointaner_x, cointaner_y, container_width, container_height)
-                        print("Ball Hit! +1 Point ")
-                        score += 1
-                if remaining_time == 0:
-                    timer = False
-            # elif remaining_time == 0:
-            elif timer == False:
-                display_score = False
-                display_text(font, font_color, window_width/2, window_height/5, window, text="Times Up!")
-                display_text(font, font_color, window_width/2, window_height/2, window, text=f'Your Score : {str(score)}')
-                button_restart.draw()
-                button_home.draw()
-                if end_score:
-                    print("Your Score : ", score)
-                    end_score = False
-                mouse_pos_button = (window_width/2, window_height/2)
-                if event.type == MOUSEBUTTONDOWN:
-                    if event.button == 1:  # Left mouse button
-                        # Get the mouse coordinates
-                        if event.button == 1:
-                            mouse_pos_button = pygame.mouse.get_pos()
-                # if restart:
-                if button_restart.is_clicked(mouse_pos_button):
-                    timer = True
-                    restart = True
-                    display_score = True
-                    score = 0
-                    score = 0
-                    print("Game Restart. Try Your Best!")
-                elif button_home.is_clicked(mouse_pos_button):
-                    restart=True
-                    timer = True
-                    display_score = True
-                    home = True
-                    game_running = False
-                    score = 0
-                    print("Go Home")
+            # countdown before start game
+            if start_countdown:
+                countdown = True
+                countdown_current_time = pygame.time.get_ticks()
+                start_countdown = False
+                start = False
+            if countdown:
+                countdown_start_time = pygame.time.get_ticks() - countdown_current_time
+                countdown_time = max(0, (countdown_duration - countdown_start_time)) // 1000
+                display_text(font, font_color, window_width/2, window_height/2, window, text=f'Game starting in {countdown_time}')
+                if countdown_time == 0:
+                    start = True
+                    current_time = pygame.time.get_ticks()
+                    countdown = False
+            if start:
+                # if game restart
+                if restart:
+                    # intialize current time again
+                    current_time = pygame.time.get_ticks()
+                    # to get current time only once
+                    restart = False
+                    # if remaining_time != 0:
+                if timer == True:
+                    countdown = False
+                    start_time = pygame.time.get_ticks() - current_time 
+                    remaining_time = max(0, (duration - start_time)) // 1000
+                    # Render the game timer
+                    display_text(font, font_color, window_width/2, window_height/6, window, text=str(remaining_time))
+                    circle.draw(cointaner_x, cointaner_y, container_width, container_height)
+                    if display_score:
+                        display_text(font_score, font_color, window_width/4, window_height/4, window, text=f'Score : {score}')
+                    # Event of click on circle
+                    if event.type == MOUSEBUTTONDOWN:
+                        if event.button == 1:  # Left mouse button
+                            # Get the mouse coordinates
+                            mouse_x, mouse_y = pygame.mouse.get_pos()
+                    # check if point inside circle
+                    if mouse_x >= (cointaner_x) and mouse_x <=  (cointaner_x + container_width):
+                        if mouse_y >= (cointaner_y) and mouse_y <= (cointaner_y + container_height):
+                            cointaner_x = random.randint(constraint_x_left + container_width, constraint_x_right - container_width)
+                            cointaner_y = random.randint(constraint_y_top + container_height, constraint_y_bottom - container_height)
+                            circle.draw(cointaner_x, cointaner_y, container_width, container_height)
+                            print("Ball Hit! +1 Point ")
+                            score += 1
+                    if remaining_time == 0:
+                        timer = False
+                # elif remaining_time == 0:
+                elif timer == False:
+                    display_score = False
+                    display_text(font, font_color, window_width/2, window_height/5, window, text="Times Up!")
+                    display_text(font, font_color, window_width/2, window_height/2, window, text=f'Your Score : {str(score)}')
+                    button_restart.draw()
+                    button_home.draw()
+                    if end_score:
+                        print("Your Score : ", score)
+                        end_score = False
+                    mouse_pos_button = (window_width/2, window_height/2)
+                    if event.type == MOUSEBUTTONDOWN:
+                        if event.button == 1:  # Left mouse button
+                            # Get the mouse coordinates
+                            if event.button == 1:
+                                mouse_pos_button = pygame.mouse.get_pos()
+                    # if restart:
+                    if button_restart.is_clicked(mouse_pos_button):
+                        timer = True
+                        restart = True
+                        display_score = True
+                        start_countdown = True
+                        score = 0
+                        print("Game Restart. Try Your Best!")
+                    elif button_home.is_clicked(mouse_pos_button):
+                        restart=True
+                        timer = True
+                        display_score = True
+                        home = True
+                        game_running = False
+                        start_countdown = True
+                        score = 0
+                        print("Go Home")
 
                         
                         
@@ -214,8 +232,7 @@ def main():
                 
         
                 
-                #TODO 3.0 display real time score
-                #TODO 4.0 adjust constraint area for ball to appear
+                #TODO 4.0 log report output
                 #TODO 5.0 add countdown before start game
                 #TODO 6.0 add sound if ball hit and ball appear
                 #TODO 7.0 change mouse cursor
