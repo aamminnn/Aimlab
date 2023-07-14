@@ -32,6 +32,14 @@ class Button:
 
     def is_clicked(self, pos):
         return self.rect.collidepoint(pos)
+    
+def reset_true(*options):
+    for value in options:
+        value = True
+
+def reset_false(*options):
+    for value in options:
+        value = False
 
 def main():
     # pygame setup
@@ -40,6 +48,7 @@ def main():
     window_height = 600
     global window
     window = pygame.display.set_mode((window_width, window_height))
+    pygame.display.set_caption("AimLab")
     clock = pygame.time.Clock()
     score = 0
 
@@ -50,9 +59,11 @@ def main():
     home = True
     restart = False
     timer = True
+    display_score = True
 
     # Set up the font
     font = pygame.font.SysFont(None, 48)
+    font_score = pygame.font.SysFont(None,30)
     font_color = (182, 192, 207)
 
     # timer setup
@@ -147,6 +158,8 @@ def main():
                 # Render the countdown timer
                 display_text(font, font_color, window_width/2, window_height/6, window, text=str(remaining_time))
                 circle.draw(cointaner_x, cointaner_y, container_width, container_height)
+                if display_score:
+                    display_text(font_score, font_color, window_width/4, window_height/4, window, text=f'Score : {score}')
                 # Event of click on circle
                 if event.type == MOUSEBUTTONDOWN:
                     if event.button == 1:  # Left mouse button
@@ -164,6 +177,7 @@ def main():
                     timer = False
             # elif remaining_time == 0:
             elif timer == False:
+                display_score = False
                 display_text(font, font_color, window_width/2, window_height/5, window, text="Times Up!")
                 display_text(font, font_color, window_width/2, window_height/2, window, text=f'Your Score : {str(score)}')
                 button_restart.draw()
@@ -181,13 +195,16 @@ def main():
                 if button_restart.is_clicked(mouse_pos_button):
                     timer = True
                     restart = True
+                    display_score = True
+                    score = 0
                     score = 0
                     print("Game Restart. Try Your Best!")
                 elif button_home.is_clicked(mouse_pos_button):
-                    home = True
-                    game_running = False
                     restart=True
                     timer = True
+                    display_score = True
+                    home = True
+                    game_running = False
                     score = 0
                     print("Go Home")
 
@@ -196,7 +213,7 @@ def main():
                 
                 
         
-                #TODO 2.0 restart game / home option
+                
                 #TODO 3.0 display real time score
                 #TODO 4.0 adjust constraint area for ball to appear
                 #TODO 5.0 add countdown before start game
