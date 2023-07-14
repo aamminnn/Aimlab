@@ -2,6 +2,8 @@
 import pygame
 import random
 from pygame.locals import *
+import logging
+from log_file import log
 import sys
 
 class Circle:
@@ -57,7 +59,6 @@ def main():
     game_running = False
     end_score = True
     home = True
-    restart = True
     timer = True
     display_score = True
     start_countdown = True
@@ -113,6 +114,9 @@ def main():
         y=window_height - window_height/6, 
         w=button_width, 
         h=button_height)
+    
+    # Logging report
+    log("\n-----------SESSION STARTING--------------")
 
     while running:
         # poll for events
@@ -139,7 +143,8 @@ def main():
                     if mouse_y >= (cointaner_y_start) and mouse_y <= (cointaner_y_start + container_height):
                         if not game_running:
                             # Start the game here
-                            print("Game started!")
+                            # print("Game started!")
+                            log("Game started!")
                             game_running = True
                             home = False
             window.fill((36, 38, 41))
@@ -161,13 +166,7 @@ def main():
                     current_time = pygame.time.get_ticks()
                     countdown = False
             if start:
-                # if game restart
-                if restart:
-                    # intialize current time again
-                    current_time = pygame.time.get_ticks()
-                    # to get current time only once
-                    restart = False
-                    # if remaining_time != 0:
+                # if remaining_time != 0:
                 if timer == True:
                     countdown = False
                     start_time = pygame.time.get_ticks() - current_time 
@@ -188,7 +187,8 @@ def main():
                             cointaner_x = random.randint(constraint_x_left + container_width, constraint_x_right - container_width)
                             cointaner_y = random.randint(constraint_y_top + container_height, constraint_y_bottom - container_height)
                             circle.draw(cointaner_x, cointaner_y, container_width, container_height)
-                            print("Ball Hit! +1 Point ")
+                            # print("Ball Hit! +1 Point ")
+                            log("Ball Hit! +1 Point ")
                             score += 1
                     if remaining_time == 0:
                         timer = False
@@ -201,6 +201,7 @@ def main():
                     button_home.draw()
                     if end_score:
                         print("Your Score : ", score)
+                        log(f"Your Score : {score}")
                         end_score = False
                     mouse_pos_button = (window_width/2, window_height/2)
                     if event.type == MOUSEBUTTONDOWN:
@@ -211,13 +212,11 @@ def main():
                     # if restart:
                     if button_restart.is_clicked(mouse_pos_button):
                         timer = True
-                        restart = True
                         display_score = True
                         start_countdown = True
                         score = 0
                         print("Game Restart. Try Your Best!")
                     elif button_home.is_clicked(mouse_pos_button):
-                        restart=True
                         timer = True
                         display_score = True
                         home = True
@@ -233,7 +232,6 @@ def main():
         
                 
                 #TODO 4.0 log report output
-                #TODO 5.0 add countdown before start game
                 #TODO 6.0 add sound if ball hit and ball appear
                 #TODO 7.0 change mouse cursor
                 #TODO 8.0 allow player to pick time [10,30,60] seconds
@@ -246,6 +244,8 @@ def main():
 
 
     pygame.quit()
+    log("\n-----------SESSION ENDED--------------\n\n")
+
 
 if __name__ == '__main__':
     main()
