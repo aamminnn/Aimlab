@@ -54,6 +54,15 @@ def main():
     clock = pygame.time.Clock()
     score = 0
 
+    # sound setup
+    pygame.mixer.init()
+    sound_effect = pygame.mixer.Sound('bloop.mp3')
+
+    # cursor setup
+    # cursor_image = pygame.image.load('cursor.png')
+    # cursor_data, cursor_mask = pygame.cursors.compile(cursor_image)
+    # pygame.mouse.set_cursor((32, 32), (0, 0), cursor_data, cursor_mask)
+
     # option
     running = True
     game_running = False
@@ -145,6 +154,7 @@ def main():
                             # Start the game here
                             # print("Game started!")
                             log("Game started!")
+                            sound_effect.play()
                             game_running = True
                             home = False
             window.fill((36, 38, 41))
@@ -189,6 +199,7 @@ def main():
                             circle.draw(cointaner_x, cointaner_y, container_width, container_height)
                             # print("Ball Hit! +1 Point ")
                             log("Ball Hit! +1 Point ")
+                            sound_effect.play()
                             score += 1
                     if remaining_time == 0:
                         timer = False
@@ -227,11 +238,6 @@ def main():
 
                         
                         
-                
-                
-        
-                
-                #TODO 4.0 log report output
                 #TODO 6.0 add sound if ball hit and ball appear
                 #TODO 7.0 change mouse cursor
                 #TODO 8.0 allow player to pick time [10,30,60] seconds
