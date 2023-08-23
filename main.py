@@ -54,6 +54,10 @@ def main():
     clock = pygame.time.Clock()
     score = 0
 
+    # Input variables
+    name_string = ""
+    name_active = True
+
     # sound setup
     pygame.mixer.init()
     sound_effect = pygame.mixer.Sound('bloop.mp3')
